@@ -9,8 +9,7 @@ import { fetchData } from "./reducers/main";
 
 const Main = () => {
   const dispatch = useDispatch();
-  const loading = useSelector((state) => state.main.loading);
-  const data = useSelector((state) => state.main.data);
+  const { loading, data, errorMsg } = useSelector((state) => state.main);
 
   return (
     <div>
@@ -19,7 +18,8 @@ const Main = () => {
         Click to add data to state
       </Button>
 
-      {loading && <h4>Loading...</h4>}
+      {loading && <h4>Fetching data...</h4>}
+      {errorMsg && <h4>{errorMsg}</h4>}
 
       {!isEmpty(data) && (
         <List>
