@@ -1,17 +1,29 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit";
 
 export const mainSlice = createSlice({
-    name: 'main',
-    initialState: {
-        value: 0
+  name: "main",
+  initialState: {
+    loading: false,
+    errorMsg: null,
+    data: [],
+  },
+  reducers: {
+    fetchData: (state) => {
+      state.loading = true;
     },
-    reducers: {
-        doSomethingWithState: (state, action) => {
-            state.value += action.payload
-        }
-    }
-})
+    fetchSuccess: (state, action) => {
+      state.data = action.payload;
+    },
+    fetchError: (state, action) => {
+      state.errorMsg = action.payload;
+    },
+    setLoading: (state, action) => {
+      state.loading = action.payload;
+    },
+  },
+});
 
-export const { doSomethingWithState } = mainSlice.actions
+export const { setLoading, fetchSuccess, fetchError, fetchData } =
+  mainSlice.actions;
 
-export default mainSlice.reducer
+export default mainSlice.reducer;

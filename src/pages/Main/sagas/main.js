@@ -1,12 +1,26 @@
-import { put, takeEvery } from 'redux-saga/effects'
+import { call, delay, put, takeLatest } from "redux-saga/effects";
+import { fetchSuccess, fetchError, setLoading } from "../reducers/main";
 
+function* mainAsync() {
+  console.log("Managing side effects...");
 
-export function* mainAsync() {
-    console.log('async action')
-    yield put({ type: 'DO_SOMETHING_WITH_SAGA' })
+  yield delay(3000); // Useless, just to waste time :)
+
+  try {
+    const res = yield call(() =>
+      fetch("https://jsonplaceholder.typicode.com/posts")
+    );
+
+    const response = yield res.json();
+
+    yield put(fetchSuccess(response));
+    yield put(setLoading(false));
+  } catch (error) {
+    yield put(fetchError(error));
+    yield put(setLoading(false));
+  }
 }
 
 export default function* mainSaga() {
-    yield takeEvery('DO_SOMETHING_ASYNC', mainAsync)
+  yield takeLatest("main/fetchData", mainAsync);
 }
-
